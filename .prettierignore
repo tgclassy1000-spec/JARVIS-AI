@@ -1,0 +1,9 @@
+node_modules
+out
+coverage
+dist
+/release/
+package-lock.json
+index.html
+script.js
+style.css

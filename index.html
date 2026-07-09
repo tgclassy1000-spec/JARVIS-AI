@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>J.A.R.V.I.S. Personal AI Dashboard</title>
+  <!-- Google Fonts for futuristic look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Share+Tech+Mono&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="jarvis-mode-active"> <!-- Default mode is JARVIS mode, toggles via JS -->
+
+  <!-- CRT Scanline overlay effect for J.A.R.V.I.S. mode -->
+  <div class="scanlines"></div>
+
+  <!-- Boot/Initialization Screen -->
+  <div id="boot-screen" class="boot-screen">
+    <div class="boot-container">
+      <div class="boot-arc-reactor">
+        <div class="core-glow"></div>
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+      </div>
+      <h1 class="boot-title">J.A.R.V.I.S.</h1>
+      <p class="boot-subtitle">PERSONAL AI DASHBOARD</p>
+      <div class="boot-progress-bar">
+        <div id="boot-progress" class="boot-progress"></div>
+      </div>
+      <button id="init-btn" class="init-btn">INITIALIZE SYSTEM</button>
+      <div id="boot-status-text" class="boot-status-text">SYSTEM SECURE. STANDBY...</div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Container -->
+  <div id="dashboard" class="dashboard-hidden">
+    
+    <!-- Top HUD Header -->
+    <header class="hud-header">
+      <div class="header-left">
+        <div class="logo-box">
+          <span class="logo-text">J.A.R.V.I.S.</span>
+          <span class="logo-subtext">v3.5 // SECURE</span>
+        </div>
+        <div class="status-indicator">
+          <span class="pulse-dot"></span>
+          <span id="system-status-badge">STATUS: IDLE</span>
+        </div>
+        <!-- Global Search Bar -->
+        <div class="voice-selector-container">
+          <input type="text" id="global-search" placeholder="🔍 SEARCH BRAIN..." class="tech-select" style="max-width: 140px; border-style: solid;">
+        </div>
+      </div>
+      
+      <div class="header-center">
+        <div class="time-display">
+          <span id="hud-time">00:00:00</span>
+          <span id="hud-date" class="hud-date">17.06.2026</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Voice Synth Engine Dropdown -->
+        <div class="voice-selector-container">
+          <label for="voice-select" class="tech-label">VOICE ENGINE:</label>
+          <select id="voice-select" class="tech-select">
+            <option value="">Detecting Voices...</option>
+          </select>
+        </div>
+        <!-- HUD Theme Skin Selector -->
+        <div class="voice-selector-container">
+          <label for="theme-select" class="tech-label">HUD SKIN:</label>
+          <select id="theme-select" class="tech-select">
+            <option value="cyan">JARVIS (CYAN)</option>
+            <option value="amber">FRIDAY (AMBER)</option>
+            <option value="red">JACKPOT (RED)</option>
+            <option value="green">STEALTH (GREEN)</option>
+          </select>
+        </div>
+        <!-- Mode Switcher -->
+        <div class="mode-toggle-box">
+          <span class="mode-label">JARVIS MODE</span>
+          <label class="switch">
+            <input type="checkbox" id="mode-toggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <!-- Settings Trigger Button -->
+        <div class="voice-selector-container">
+          <button id="settings-btn" class="panel-btn" title="System Configuration" style="padding: 4px 8px; font-size: 0.75rem;">⚙️ Settings</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Grid Content -->
+    <main class="dashboard-grid">
+      
+      <!-- Left Column: Memory & Core Console -->
+      <section class="grid-col left-col">
+        <!-- 1. Notes Panel -->
+        <div class="hud-panel" id="panel-notes">
+          <div class="panel-header">
+            <h3><span class="icon">📁</span> PERSONAL NOTES</h3>
+            <span class="panel-counter" id="note-count">0</span>
+          </div>
+          <div class="panel-content">
+            <div id="notes-list" class="data-list scrollable">
+              <!-- Dynamically populated -->
+              <p class="empty-msg">No saved notes, Sir.</p>
+            </div>
+          </div>
+          <div class="panel-actions">
+            <button class="panel-btn" id="btn-panel-add-note">+ Add Note</button>
+          </div>
+        </div>
+
+        <!-- 2. Ideas Panel -->
+        <div class="hud-panel" id="panel-ideas">
+          <div class="panel-header">
+            <h3><span class="icon">💡</span> BRAINSTORM IDEAS</h3>
+            <span class="panel-counter" id="idea-count">0</span>
+          </div>
+          <div class="panel-content">
+            <div id="ideas-list" class="data-list scrollable">
+              <!-- Dynamically populated -->
+              <p class="empty-msg">No saved ideas, Sir.</p>
+            </div>
+          </div>
+          <div class="panel-actions">
+            <button class="panel-btn" id="btn-panel-add-idea">+ Add Idea</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Center Column: Core UI, Radar, Command Console -->
+      <section class="grid-col center-col">
+        
+        <!-- Interactive AI Core and Radar Widget -->
+        <div class="core-widget">
+          
+          <!-- Radar Scanning Circles -->
+          <div class="radar-container">
+            <div class="radar-circle circle-1"></div>
+            <div class="radar-circle circle-2"></div>
+            <div class="radar-circle circle-3"></div>
+            <div class="radar-sweep"></div>
+          </div>
+
+          <!-- Central AI Glow and Pulse -->
+          <div class="ai-core-ring" id="ai-core">
+            <div class="core-center">
+              <span class="core-particle"></span>
+            </div>
+            <div class="orbit ring-o1"></div>
+            <div class="orbit ring-o2"></div>
+          </div>
+
+          <!-- Sound Wave Animation (Active during speech/listening) -->
+          <div class="voice-wave-container" id="voice-wave">
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+          </div>
+
+          <div class="core-label" id="core-state-label">CORE ONLINE</div>
+        </div>
+
+        <!-- Command Console (Typewriter history & Inputs) -->
+        <div class="hud-panel console-panel">
+          <div class="panel-header">
+            <h3><span class="icon">⚙️</span> COMMAND CONSOLE</h3>
+            <span class="console-mic-status" id="mic-status">MIC: ON</span>
+          </div>
+          <div class="panel-content console-content scrollable" id="console-history-container">
+            <div id="console-history">
+              <div class="console-line system-line">&gt; J.A.R.V.I.S. Core initialized... ready for queries, Sir.</div>
+            </div>
+          </div>
+          <!-- Inputs (Text + Mic Button) -->
+          <div class="console-input-bar">
+            <input type="text" id="text-input" placeholder="Enter command or speak, Sir..." autofocus autocomplete="off">
+            <button id="mic-btn" class="mic-btn" title="Speak Command">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Right Column: Tasks, Projects & Planning -->
+      <section class="grid-col right-col">
+        <!-- 3. Tasks Panel -->
+        <div class="hud-panel" id="panel-tasks">
+          <div class="panel-header">
+            <h3><span class="icon">📝</span> TASK TRACKER</h3>
+            <span class="panel-counter" id="task-count">0</span>
+          </div>
+          <div class="panel-content">
+            <div id="tasks-list" class="data-list scrollable">
+              <!-- Dynamically populated -->
+              <p class="empty-msg">No active tasks, Sir.</p>
+            </div>
+          </div>
+          <div class="panel-actions">
+            <button class="panel-btn" id="btn-panel-add-task">+ Add Task</button>
+          </div>
+        </div>
+
+        <!-- 4. Projects Panel -->
+        <div class="hud-panel" id="panel-projects">
+          <div class="panel-header">
+            <h3><span class="icon">📁</span> ACTIVE PROJECTS</h3>
+            <span class="panel-counter" id="project-count">0</span>
+          </div>
+          <div class="panel-content">
+            <div id="projects-list" class="data-list scrollable">
+              <!-- Dynamically populated -->
+              <p class="empty-msg">No active projects, Sir.</p>
+            </div>
+          </div>
+          <div class="panel-actions">
+            <button class="panel-btn" id="btn-panel-add-project">+ Add Project</button>
+          </div>
+        </div>
+
+        <!-- 5. Daily Plan Panel -->
+        <div class="hud-panel" id="panel-daily-plan">
+          <div class="panel-header">
+            <h3><span class="icon">📅</span> DAILY PLANNER</h3>
+          </div>
+          <div class="panel-content">
+            <div id="daily-plan-content" class="data-list scrollable">
+              <!-- Generated daily plan -->
+              <p class="empty-msg">No plan generated yet. Try "daily plan banao", Sir.</p>
+            </div>
+          </div>
+          <div class="panel-actions">
+            <button class="panel-btn" id="btn-panel-gen-plan">Generate Plan</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- System Status Dashboard (Below Grid) -->
+    <section class="system-status-section">
+      <div class="hud-panel status-dashboard-panel">
+        <div class="panel-header">
+          <h3><span class="icon">📊</span> SYSTEM HARMONICS & MEMORY</h3>
+        </div>
+        <div class="status-grid-container">
+          
+          <div class="status-card">
+            <span class="status-card-label">VOICE SYNTHESIS</span>
+            <span class="status-card-value" id="status-voice-sys">ONLINE</span>
+            <div class="status-card-bar"><div class="fill" style="width: 100%;"></div></div>
+          </div>
+
+          <div class="status-card">
+            <span class="status-card-label">MEMORY INDEX</span>
+            <span class="status-card-value" id="status-memory-idx">0 ITEMS</span>
+            <div class="status-card-bar"><div class="fill" id="status-memory-bar-fill" style="width: 10%;"></div></div>
+          </div>
+
+          <div class="status-card">
+            <span class="status-card-label">BROWSER CONTROLS</span>
+            <span class="status-card-value" id="status-browser-ctrl">READY</span>
+            <div class="status-card-bar"><div class="fill" style="width: 100%;"></div></div>
+          </div>
+
+          <div class="status-card">
+            <span class="status-card-label">ASSISTANT MODE</span>
+            <span class="status-card-value" id="status-assistant-mode">ACTIVE</span>
+            <div class="status-card-bar"><div class="fill" id="status-assistant-bar-fill" style="width: 100%;"></div></div>
+          </div>
+
+          <div class="status-card">
+            <span class="status-card-label">STORAGE ALLOCATION</span>
+            <span class="status-card-value" id="status-storage-val">0.0 KB</span>
+            <div class="status-card-bar"><div class="fill" id="status-storage-fill" style="width: 5%;"></div></div>
+          </div>
+
+          <div class="status-card">
+            <span class="status-card-label">DECORATIVE GRID CALIBRATION</span>
+            <span class="status-card-value" id="status-grid-val">99.8%</span>
+            <div class="status-card-bar"><div class="fill" style="width: 99.8%;"></div></div>
+          </div>
+
+          <div class="status-card span-two" style="position: relative;">
+            <span class="status-card-label">CORE RESONANCE HARMONICS</span>
+            <canvas id="oscillator-canvas" style="width: 100%; height: 26px; display: block; margin-top: 5px;"></canvas>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Control Bar (Quick Actions) -->
+    <footer class="hud-footer">
+      <div class="footer-btn-group">
+        <button id="btn-start" class="foot-btn accent-green">Start Jarvis</button>
+        <button id="btn-listen" class="foot-btn accent-cyan">Listen</button>
+        <button id="btn-stop" class="foot-btn accent-red">Stop</button>
+      </div>
+      <div class="footer-divider"></div>
+      <div class="footer-btn-group scrollable-btn-group">
+        <button id="btn-add-note" class="foot-btn">Add Note</button>
+        <button id="btn-add-task" class="foot-btn">Add Task</button>
+        <button id="btn-add-idea" class="foot-btn">Add Idea</button>
+        <button id="btn-add-project" class="foot-btn">Add Project</button>
+        <button id="btn-show-plan" class="foot-btn">Show Daily Plan</button>
+        <button id="btn-youtube" class="foot-btn">Open YouTube</button>
+        <button id="btn-google" class="foot-btn">Open Google</button>
+        <button id="btn-clear-console" class="foot-btn">Clear Console</button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Warning Alert Modals -->
+  <div id="warning-modal" class="warning-modal modal-hidden">
+    <div class="modal-box">
+      <h3>⚠️ ATTENTION REQUESTED</h3>
+      <p id="warning-text">Message goes here.</p>
+      <button id="warning-close-btn" class="panel-btn">DISMISS</button>
+    </div>
+  </div>
+
+  <!-- Simple Prompt Modal for clean inputs -->
+  <div id="input-modal" class="warning-modal modal-hidden">
+    <div class="modal-box">
+      <h3 id="input-modal-title">INPUT REQUIRED</h3>
+      <input type="text" id="input-modal-field" class="tech-input-modal" placeholder="Type here...">
+      <div class="modal-btn-row">
+        <button id="input-modal-cancel" class="panel-btn accent-red">CANCEL</button>
+        <button id="input-modal-submit" class="panel-btn accent-cyan">SUBMIT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="warning-modal modal-hidden">
+    <div class="modal-box" style="max-width: 420px; text-align: left;">
+      <h3 style="margin-bottom: 20px; text-align: center; font-family: var(--font-hud); color: var(--primary); font-size: 1.1rem; letter-spacing: 2px;"><span class="icon">⚙️</span> SYSTEM CONFIGURATION</h3>
+      
+      <div style="display: flex; flex-direction: column; gap: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label class="tech-label" style="font-size: 0.75rem; letter-spacing: 1px;">SPEECH SPEED</label>
+          <input type="range" id="setting-speech-rate" min="0.5" max="2.0" step="0.1" value="1.0" style="width: 140px; cursor: pointer; accent-color: var(--primary);">
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label class="tech-label" style="font-size: 0.75rem; letter-spacing: 1px;">SPEECH PITCH</label>
+          <input type="range" id="setting-speech-pitch" min="0.5" max="2.0" step="0.1" value="1.0" style="width: 140px; cursor: pointer; accent-color: var(--primary);">
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label class="tech-label" style="font-size: 0.75rem; letter-spacing: 1px;">AUDIO VOLUME</label>
+          <input type="range" id="setting-fx-volume" min="0.0" max="1.0" step="0.1" value="0.8" style="width: 140px; cursor: pointer; accent-color: var(--primary);">
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label class="tech-label" style="font-size: 0.75rem; letter-spacing: 1px;">SPEECH FEEDBACK</label>
+          <label class="switch">
+            <input type="checkbox" id="setting-voice-toggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <label class="tech-label" style="font-size: 0.75rem; letter-spacing: 1px;">LAB AMBIENT HUM</label>
+          <label class="switch">
+            <input type="checkbox" id="setting-hum-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(0, 210, 255, 0.15); padding-top: 15px;">
+        <button id="settings-clear-all" class="panel-btn accent-red" style="font-size: 0.7rem;">WIPE DATA</button>
+        <button id="settings-close" class="panel-btn accent-cyan">CLOSE</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
