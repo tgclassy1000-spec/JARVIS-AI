@@ -10,3 +10,6 @@ release/
 .DS_Store
 Thumbs.db
 *.local
+# Temporary
+.tmp-desktop-tests/
+.tmp-electron-smoke/
